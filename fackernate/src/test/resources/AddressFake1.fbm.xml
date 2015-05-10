@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- model not found -->
+<bluetechnology-mapping package="practice.fackernate.model">
+	<class name="AddressFake1" table="address">
+		<id name="id" column="id" type="java.lang.Long" />
+		<property name="address" column="ADDRESS" type="java.lang.String"/>
+		<property name="zipCode" column="ZIP_CODE" type="java.lang.String"/>
+		<property name="city" column="CITY" type="java.lang.String"/>
+	</class>
+</bluetechnology-mapping>

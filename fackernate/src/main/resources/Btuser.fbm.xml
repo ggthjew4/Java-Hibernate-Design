@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<bluetechnology-mapping package="operation.model">
+	<class name="Btuser" table="btuser">
+		<id name="usrSn" column="USR_SN" type="java.lang.Long" />
+		<property name="usrId" column="USR_ID" type="java.lang.String"/>
+		<property name="usrName" column="USR_NAME" type="java.lang.String"/>
+		<property name="usrPwd" column="USR_PWD" type="java.lang.String"/>
+		<property name="usrAge" column="USR_AGE" type="java.lang.Integer"/>
+		<property name="usrVer" column="USR_VER" type="java.lang.Integer"/>
+	</class>
+</bluetechnology-mapping>

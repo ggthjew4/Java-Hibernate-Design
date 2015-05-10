@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- xml schema error -->
+<bluetechnology-mapping package="practice.fackernate.model">
+	<entity name="Address" table="address">
+		<id name="id" column_id="id" type="java.lang.Long" />
+		<property class_name="address" column="ADDRESS" type="java.lang.String"/>
+		<property class_name="zipCode" column="ZIP_CODE" type="java.lang.String"/>
+		<property class_name="city" column="CITY" type="java.lang.String"/>
+	</entity>
+</bluetechnology-mapping>

@@ -1,0 +1,11 @@
+/.settings
+/target
+/.classpath
+/.DS_Store
+/.project
+/fackernate_class.ucls
+/fackernate_sequence_common.useq
+/fackernate_sequence_delete.useq
+/fackernate_sequence_get.useq
+/fackernate_sequence_save.useq
+/fackernate_sequence_update.useq
