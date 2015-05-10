@@ -33,16 +33,14 @@ import practice.fackernate.mapping.MappingObject;
 import practice.fackernate.mapping.Property;
 
 public class XmlConfiguration implements Configuration {
-	
-	
+
 	public static final String XMLFILE_POSTFIX = ".fbm.xml";
-	
+
 	/**
-	 * key : classs.getName()
-	 * value : config mapping object
+	 * key : classs.getName() value : config mapping object
 	 */
 	private Map<String, MappingObject> xmlConfig = new HashMap<String, MappingObject>();
-	
+
 	/**
 	 * clear all data in memory
 	 */
@@ -51,42 +49,48 @@ public class XmlConfiguration implements Configuration {
 			xmlConfig.clear();
 		}
 	}
-	
+
 	/**
 	 * bind data form xml file
+	 * 
 	 * @param xmlFile
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public void bindXmlFile(File xmlFile)  {
+	public void bindXmlFile(File xmlFile) {
 		try {
-			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder();
 			if (xmlFile.exists()) {
 				final Document doc = dBuilder.parse(xmlFile);
-				
-				//validate xml
+
+				// validate xml
 				// create a SchemaFactory capable of understanding WXS schemas
-				SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	
+				SchemaFactory factory = SchemaFactory
+						.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
 				// load a WXS schema, represented by a Schema instance
-				Source schemaFile = new StreamSource(Thread.currentThread().getContextClassLoader()
+				Source schemaFile = new StreamSource(Thread.currentThread()
+						.getContextClassLoader()
 						.getResourceAsStream("FackernateSchema.xsd"));
 				Schema schema = factory.newSchema(schemaFile);
-	
-				// create a Validator instance, which can be used to validate an instance document
+
+				// create a Validator instance, which can be used to validate an
+				// instance document
 				Validator validator = schema.newValidator();
-	
+
 				// validate the DOM tree
 				try {
-				    validator.validate(new DOMSource(doc));
+					validator.validate(new DOMSource(doc));
 				} catch (SAXException e) {
 					throw new XmlParsingException(e);
 				}
-				
+
 				final Element root = doc.getDocumentElement();
-				final Element classNode = (Element) root.getElementsByTagName("class").item(0);
+				final Element classNode = (Element) root.getElementsByTagName(
+						"class").item(0);
 
 				final String fullClassName = root.getAttribute("package") + "."
 						+ classNode.getAttribute("name");
@@ -95,11 +99,14 @@ public class XmlConfiguration implements Configuration {
 				obj.setClassName(fullClassName);
 				obj.setTableName(classNode.getAttribute("table"));
 
-				obj.setId(new Property((Element) classNode.getElementsByTagName("id").item(0)));
+				obj.setId(new Property((Element) classNode
+						.getElementsByTagName("id").item(0)));
 
-				final NodeList propertyNodes = classNode.getElementsByTagName("property");
+				final NodeList propertyNodes = classNode
+						.getElementsByTagName("property");
 				for (int i = 0; i < propertyNodes.getLength(); i++) {
-					final Element propertyElement = (Element) propertyNodes.item(i);
+					final Element propertyElement = (Element) propertyNodes
+							.item(i);
 					obj.getProperties().add(new Property(propertyElement));
 				}
 
@@ -112,31 +119,34 @@ public class XmlConfiguration implements Configuration {
 			} else {
 				throw new FileNotFoundException();
 			}
-		} catch (DOMException
-				| ParserConfigurationException | SAXException | IOException e) {
+		} catch (DOMException | ParserConfigurationException | SAXException
+				| IOException e) {
 			throw new XmlParsingException(e);
 		}
 	}
-	
+
 	/**
 	 * bind one file
+	 * 
 	 * @param fileName
 	 */
 	public void bindFileName(String fileName) {
-		
-		//get file in the src/main(test)/java/resources
-		URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
-		
+
+		// get file in the src/main(test)/java/resources
+		URL url = Thread.currentThread().getContextClassLoader()
+				.getResource(fileName);
+
 		if (url == null) {
 			throw new ConfigNotFoundException(fileName);
 		}
-		
+
 		final File file = new File(url.getPath());
 		this.bindXmlFile(file);
 	}
-	
+
 	/**
 	 * bind a set of files
+	 * 
 	 * @param fileNames
 	 */
 	public void bindFileNames(Set<String> fileNames) {
@@ -144,16 +154,16 @@ public class XmlConfiguration implements Configuration {
 			this.bindFileName(fileName);
 		}
 	}
-	
+
 	@Override
 	public MappingObject getMappingObjectByClass(Class<?> clazz) {
-		
+
 		MappingObject obj = xmlConfig.get(clazz.getName());
-		
+
 		if (obj == null) {
 			throw new ConfigNotFoundException(clazz.getName());
 		}
-		
+
 		return obj;
 	}
 
